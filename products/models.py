@@ -5,7 +5,7 @@ from cores.models import TimestampZone
 class Product(TimestampZone): 
     name     = models.CharField(max_length=100)
     price    = models.DecimalField(max_digits=10, decimal_places=2)
-    grapes   = models.CharField(max_length=100)
+    grape    = models.CharField(max_length=100)
     bold     = models.DecimalField(max_digits=3, decimal_places=2)
     tannic   = models.DecimalField(max_digits=3, decimal_places=2)
     sweet    = models.DecimalField(max_digits=3, decimal_places=2)
