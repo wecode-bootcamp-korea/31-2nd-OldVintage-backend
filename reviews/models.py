@@ -12,7 +12,7 @@ class Review(TimestampZone):
         db_table = 'reviews'
         
 class Image(TimestampZone): 
-    image_url = models.CharField(max_length=1000)
+    image_url = models.CharField(max_length=1000, null=True)
     review    = models.ForeignKey('Review', on_delete=models.CASCADE, related_name='images')
 
     class Meta:
