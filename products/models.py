@@ -3,16 +3,17 @@ from django.db import models
 from cores.models import TimestampZone
 
 class Product(TimestampZone): 
-    name     = models.CharField(max_length=100)
-    price    = models.DecimalField(max_digits=10, decimal_places=2)
-    grape    = models.CharField(max_length=100)
-    bold     = models.DecimalField(max_digits=3, decimal_places=2)
-    tannic   = models.DecimalField(max_digits=3, decimal_places=2)
-    sweet    = models.DecimalField(max_digits=3, decimal_places=2)
-    acidic   = models.DecimalField(max_digits=3, decimal_places=2)
-    winery   = models.ForeignKey('Winery', on_delete=models.CASCADE, related_name='products')
-    type     = models.ForeignKey('Type', on_delete=models.CASCADE, related_name='products')
-    pairings = models.ManyToManyField('Pairing', through='Productpairing')
+    name      = models.CharField(max_length=100)
+    price     = models.DecimalField(max_digits=10, decimal_places=2)
+    grape     = models.CharField(max_length=100)
+    bold      = models.DecimalField(max_digits=3, decimal_places=2)
+    tannic    = models.DecimalField(max_digits=3, decimal_places=2)
+    sweet     = models.DecimalField(max_digits=3, decimal_places=2)
+    acidic    = models.DecimalField(max_digits=3, decimal_places=2)
+    winery    = models.ForeignKey('Winery', on_delete=models.CASCADE, related_name='products')
+    type      = models.ForeignKey('Type', on_delete=models.CASCADE, related_name='products')
+    image_url = models.CharField(max_length=1000)
+    pairings  = models.ManyToManyField('Pairing', through='Productpairing')
 
     class Meta:
         db_table = 'products'
@@ -41,7 +42,8 @@ class Type(TimestampZone):
         db_table = 'types'
 
 class Pairing(TimestampZone):
-    name = models.CharField(max_length=100)
+    name      = models.CharField(max_length=100)
+    image_url = models.CharField(max_length=1000)
     
     class Meta:
         db_table = 'pairings'
