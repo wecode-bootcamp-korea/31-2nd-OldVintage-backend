@@ -1,5 +1,5 @@
 from pathlib import Path
-from my_settings import DATABASES, SECRET_KEY, ALGORITHM
+from my_settings import DATABASES, SECRET_KEY, ALGORITHM, KAKAO_APP_KEY
 
 import pymysql
 
@@ -37,6 +37,8 @@ INSTALLED_APPS = [
     'reviews',
     'users',
 ]
+
+KAKAO_APP_KEY = KAKAO_APP_KEY
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
