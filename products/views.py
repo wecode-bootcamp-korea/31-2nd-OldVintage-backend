@@ -37,12 +37,15 @@ class ProductListView(View):
                 if filter_get_set.get(key)}
         }
         
-        products = Product.objects.select_related('winery__country', 'grape', 'type')\
+        filter_products = Product.objects.select_related('winery__country', 'grape', 'type')\
         .prefetch_related('productpairings__pairing', 'reviews__user')\
         .annotate(
         rating_score = Avg('reviews__rating'),
         rating_count = Count('reviews__rating')
-        ).filter(**query).order_by(sorting.get(order, '-rating_score'))[offset:offset+limit]
+        ).filter(**query).order_by(sorting.get(order, '-rating_score'))
+        
+        products = filter_products[offset:offset+limit]
+        length   = filter_products.count()
 
         result = [{
             'id'       : product.id,
@@ -76,4 +79,4 @@ class ProductListView(View):
             }
         }for product in products]
 
-        return JsonResponse({'result' : result, 'length' : len(result)}, status=200)
+        return JsonResponse({'result' : result, 'length' : length}, status=200)
