@@ -113,14 +113,14 @@ class ProductDetailView(View):
     def get(self, request, product_id):
         try:
             product = Product.objects.annotate(
-            rating_score = Avg('reviews__rating'),
-            rating_count = Count('reviews__rating'),
-            score_one    = Count('reviews__rating', filter=Q(reviews__rating__exact =1)),
-            score_two    = Count('reviews__rating', filter=Q(reviews__rating__exact =2)),
-            score_three  = Count('reviews__rating', filter=Q(reviews__rating__exact =3)),
-            score_four   = Count('reviews__rating', filter=Q(reviews__rating__exact =4)),
-            score_five   = Count('reviews__rating', filter=Q(reviews__rating__exact =5))
-            ).get(id=product_id)
+                rating_score = Avg('reviews__rating'),
+                rating_count = Count('reviews__rating'),
+                score_one    = Count('reviews__rating', filter=Q(reviews__rating__exact =1)),
+                score_two    = Count('reviews__rating', filter=Q(reviews__rating__exact =2)),
+                score_three  = Count('reviews__rating', filter=Q(reviews__rating__exact =3)),
+                score_four   = Count('reviews__rating', filter=Q(reviews__rating__exact =4)),
+                score_five   = Count('reviews__rating', filter=Q(reviews__rating__exact =5))
+                ).get(id=product_id)
         
             winery      = product.winery
             winery_info = Review.objects.filter(product__winery = winery)\

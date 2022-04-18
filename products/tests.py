@@ -102,7 +102,7 @@ class ProductListViewTest(TestCase):
         Review.objects.all().delete()
 
     def test_success_product_list_view_get(self):
-        client = Client()
+        client   = Client()
         response = client.get('/products')
 
         self.assertEqual(response.status_code, 200)
@@ -180,7 +180,7 @@ class ProductListViewTest(TestCase):
         })
 
     def test_fail_filter_product_list_view_get(self):
-        client = Client()
+        client   = Client()
         response = client.get('/products', {'winery_id' : 10})
         
         self.assertEqual(response.status_code, 200)
@@ -191,7 +191,7 @@ class ProductListViewTest(TestCase):
         })
         
     def test_success_filter_product_list_view_get(self):
-        client = Client()
+        client   = Client()
         response = client.get('/products', {'winery_id' : 1, 'type_id' : 1, 'rating' : 4.5})
         
         self.assertEqual(response.status_code, 200)
@@ -333,7 +333,7 @@ class ProductDetailViewTest(TestCase):
         Review.objects.all().delete()
 
     def test_success_product_detail_view_get(self):
-        client = Client()
+        client   = Client()
         response = client.get('/products/1')
 
         self.assertEqual(response.status_code, 200)
@@ -378,14 +378,14 @@ class ProductDetailViewTest(TestCase):
         })
 
     def test_fail_filter_product_list_view_get(self):
-        client = Client()
+        client   = Client()
         response = client.get('/products/3')
         
         self.assertEqual(response.status_code, 404)
   
 class ProductReviewViewTest(TestCase):
     def test_success_product_review_view_get(self):
-        client = Client()
+        client   = Client()
         response = client.get('/products/1/reviews')
 
         self.assertEqual(response.status_code, 200)
@@ -504,7 +504,7 @@ class SearchViewTest(TestCase):
         Review.objects.all().delete()
 
     def test_success_search_view_get(self):
-        client = Client()
+        client   = Client()
         response = client.get('/products/search', {'name' : '1번'})
 
         self.assertEqual(response.status_code, 200)
