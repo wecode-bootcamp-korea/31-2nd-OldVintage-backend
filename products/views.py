@@ -3,6 +3,7 @@ from django.http      import JsonResponse
 from django.db.models import Avg, Count
 
 from products.models import Product
+from reviews.models  import Review
 
 class ProductListView(View):
     def get(self,request):
@@ -80,3 +81,30 @@ class ProductListView(View):
         }for product in products]
 
         return JsonResponse({'result' : result, 'length' : length}, status=200)
+
+class ProductReviewView(View):
+    def get(self,request, product_id):
+        offset  = int(request.GET.get('offset' , 0))
+        limit   = int(request.GET.get('limit' , 20))
+        rating  = request.GET.getlist('rating', [1,2,3,4,5])
+        
+        reviews = Review.objects.select_related('product', 'user')\
+        .prefetch_related('images')\
+        .filter(
+            product_id = product_id,
+            rating__in = rating
+        ).order_by('-created_at')[offset:offset+limit]
+                
+        result = {
+            'review' : [{
+                'id'         : review.id,
+                'user'       : review.user.name,
+                'product_id' : review.product_id,
+                'rating'     : review.rating,
+                'content'    : review.content,
+                'created_at' : str(review.created_at)[:10],
+                'image_url'  : [image.image_url for image in review.images.all()]
+            }for review in reviews]
+        }
+        
+        return JsonResponse({'result' : result}, status=200)
