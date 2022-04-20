@@ -29,7 +29,6 @@ class KakaoSignView(View):
             )   
              
         token = jwt.encode({'id':user.id}, settings.SECRET_KEY, algorithm=settings.ALGORITHM)
-
         if created:
             return JsonResponse({"message" : "CREATED", "token" : token}, status = 201)
         
