@@ -1,6 +1,6 @@
 from django.views     import View
 from django.http      import JsonResponse
-from django.db.models import Avg, Count
+from django.db.models import Avg, Count, Q
 
 from products.models import Product
 from reviews.models  import Review
@@ -108,3 +108,59 @@ class ProductReviewView(View):
         }
         
         return JsonResponse({'result' : result}, status=200)
+
+class ProductDetailView(View):
+    def get(self, request, product_id):
+        try:
+            product = Product.objects.annotate(
+            rating_score = Avg('reviews__rating'),
+            rating_count = Count('reviews__rating'),
+            score_one    = Count('reviews__rating', filter=Q(reviews__rating__exact =1)),
+            score_two    = Count('reviews__rating', filter=Q(reviews__rating__exact =2)),
+            score_three  = Count('reviews__rating', filter=Q(reviews__rating__exact =3)),
+            score_four   = Count('reviews__rating', filter=Q(reviews__rating__exact =4)),
+            score_five   = Count('reviews__rating', filter=Q(reviews__rating__exact =5))
+            ).get(id=product_id)
+        
+            winery      = product.winery
+            winery_info = Review.objects.filter(product__winery = winery)\
+                .aggregate(rating = Avg('rating'))
+            
+            product_detail = {
+                'product':{
+                    'name'        : product.name,
+                    'price'       : product.price,
+                    'rating'      : round(product.rating_score, 2),
+                    'rating_count': product.rating_count,
+                    'scores'       : {
+                        'one'  : product.score_one,
+                        'two'  : product.score_two,
+                        'three': product.score_three,
+                        'four' : product.score_four,
+                        'five' : product.score_five
+                    },
+                    'image'       : product.image_url,
+                    'type'        : product.type.name,
+                    'grape'       : product.grape.name,
+                    'bold'        : product.bold,
+                    'tannic'      : product.tannic,
+                    'sweet'       : product.sweet,
+                    'acidic'      : product.acidic,
+                    'pairings'    : [{pairing.name : pairing.image_url} for pairing in product.pairings.all()]
+                },
+                'winery':{
+                'name'       : winery.name,
+                'address'    : winery.address,
+                'latitude'   : winery.latitude,
+                'longitude'  : winery.longitude,
+                'description': winery.description,
+                'rating'     : round(winery_info['rating'],2),
+                'quantity'   : Product.objects.filter(winery=winery).count(),
+                'country'    : winery.country.name
+                }            
+            }
+            
+            return JsonResponse({'product_detail' : product_detail}, status = 200)
+    
+        except Product.DoesNotExist:
+            return JsonResponse({'message': 'NO_PRODUCT'}, status=404)

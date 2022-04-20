@@ -235,7 +235,7 @@ class ProductListViewTest(TestCase):
             "length": 1
         })
 
-class ProductReviewViewTest(TestCase):
+class ProductDetailViewTest(TestCase):
     def setUp(self):
         Country.objects.bulk_create([
             Country(id = 1, name = '1번 나라'),
@@ -332,6 +332,58 @@ class ProductReviewViewTest(TestCase):
         User.objects.all().delete()
         Review.objects.all().delete()
 
+    def test_success_product_detail_view_get(self):
+        client = Client()
+        response = client.get('/products/1')
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json(),
+        {"product_detail": {
+		"product": {
+			"name": "1번 상품",
+			"price": "10000.00",
+			"rating": 5.0,
+			"rating_count": 1,
+			"scores": {
+				"one": 0,
+				"two": 0,
+				"three": 0,
+				"four": 0,
+				"five": 1
+			},
+			"image": "1.jpg",
+			"type": "1번 타입",
+			"grape": "1번 품종",
+			"bold": "0.10",
+			"tannic": "0.10",
+			"sweet": "0.10",
+			"acidic": "0.10",
+			"pairings": [
+				{
+					"1번 페어링": "1.jpg"
+				}
+			]
+		},
+		"winery": {
+			"name": "1번 양조장",
+			"address": "1번 주소",
+			"latitude": "1.0000000",
+			"longitude": "1.0000000",
+			"description": "1번 내용",
+			"rating": 5.0,
+			"quantity": 1,
+			"country": "1번 나라"
+		}
+        }
+        })
+
+    def test_fail_filter_product_list_view_get(self):
+        client = Client()
+        response = client.get('/products/3')
+        
+        self.assertEqual(response.status_code, 404)
+  
+class ProductReviewViewTest(TestCase):
     def test_success_product_review_view_get(self):
         client = Client()
         response = client.get('/products/1/reviews')
@@ -353,3 +405,4 @@ class ProductReviewViewTest(TestCase):
                 ]
             }
         })
+        

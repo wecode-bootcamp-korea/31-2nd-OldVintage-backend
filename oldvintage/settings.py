@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     'products',
     'reviews',
     'users',
+    
 ]
 
 KAKAO_APP_KEY = KAKAO_APP_KEY
