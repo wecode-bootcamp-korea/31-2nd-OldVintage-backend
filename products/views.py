@@ -164,3 +164,24 @@ class ProductDetailView(View):
     
         except Product.DoesNotExist:
             return JsonResponse({'message': 'NO_PRODUCT'}, status=404)
+        
+class SearchView(View):
+    def get(self,request):
+        offset = int(request.GET.get('offset' , 0))
+        limit  = int(request.GET.get('limit' , 6))
+        name   = request.GET.get('name', None)
+        
+        products = Product.objects.filter(name__icontains = name)[offset:offset+limit]
+
+        result = [{
+            'id'       : product.id,
+            'name'     : product.name,
+            'price'    : product.price,
+            'bold'     : product.bold,
+            'tannic'   : product.tannic,
+            'sweet'    : product.sweet,
+            'acidic'   : product.acidic,
+            'image_url': product.image_url,
+        }for product in products]
+
+        return JsonResponse({'result' : result}, status=200)
