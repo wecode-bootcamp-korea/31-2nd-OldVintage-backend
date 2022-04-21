@@ -125,5 +125,5 @@ class ReviewViewTest(TestCase):
                 return None    
                 
         mocked_s3.upload = MagicMock(return_value=MockedResponse())
-        response         = client.post('/reviews/1', data, content_type='multipart/form-data', **header)
+        response         = client.post('/reviews', data, format='multipart', **header)
         self.assertEqual(response.status_code, 201)
