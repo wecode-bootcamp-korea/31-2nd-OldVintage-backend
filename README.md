@@ -11,7 +11,7 @@
 
 ## 사용기술
 - Front-End : React.js, Material UI, Styled-Components ,react-infinite-scroll-component ,React Router
-- Back-End : 백엔드 내용을 요기랑 구현기능도 채워주세요
+- Back-End : Python, Django, Mysql, AWS(EC2, RDS, S3), boto3
 - 협업 툴 : Git, Trello, Slack, Google Spreadsheet
 
 ## 구현 기능
@@ -21,8 +21,8 @@
 - 카테고리별 상품 페이지
 - 제품 상세 페이지
 - 제품 다중필터 검색 기능
-- 내용을(백엔드)
-- 채워주세요(백엔드)
+- 해당 제품의 리뷰 작성 기능
+- 리뷰 작성 시 boto3, AWS S3를 통한 이미지 등록 기능
 <br/>
 <br/>
 👇 메인페이지
